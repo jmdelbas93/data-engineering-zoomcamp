@@ -5,9 +5,15 @@
 
 
 import pandas as pd
+from tqdm.auto import tqdm
+from sqlalchemy import create_engine
 
+year = 2021
+month = 1
 prefix = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/'
-df = pd.read_csv(prefix + 'yellow_tripdata_2021-01.csv.gz', nrows=100)
+url = f'{prefix}/yellow_tripdata_{year}-{month:02d}.csv.gz'
+
+df = pd.read_csv(url, nrows=100)
 df.head()
 
 
@@ -39,18 +45,19 @@ parse_dates = [
 ]
 
 df = pd.read_csv(
-    prefix + 'yellow_tripdata_2021-01.csv.gz',
+    url,
     nrows=100,
     dtype=dtype,
     parse_dates=parse_dates
 )
 
+engine = create_engine('postgresql://root:root@localhost:5432/ny_taxi')
 
 # In[28]:
 
 
 df_iter = pd.read_csv(
-    prefix + 'yellow_tripdata_2021-01.csv.gz',
+    url,
     dtype=dtype,
     parse_dates=parse_dates,
     iterator=True,
@@ -83,7 +90,7 @@ first_chunk.to_sql(
 # In[31]:
 
 
-from tqdm.auto import tqdm
+
 
 for df_chunk in tqdm(df_iter):
     df_chunk.to_sql(
@@ -93,7 +100,7 @@ for df_chunk in tqdm(df_iter):
     )
 
 
-# In[ ]:
+
 
 
 
