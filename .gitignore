@@ -5,6 +5,12 @@ __pycache__/
 
 # C extensions
 *.so
+# Environment variables (CRITICAL - contains credentials!)
+.env
+
+# GCP credentials
+*.json
+kestra-bootcamp-*.json
 
 # Distribution / packaging
 .Python
